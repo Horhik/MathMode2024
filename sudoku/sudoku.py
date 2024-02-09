@@ -173,28 +173,40 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
         return grid
     else:
         # If it's not solved 
-        possible_values = find_possible_values(grid, free_position)
+        possible_values = list(find_possible_values(grid, free_position))
+        shuffle(possible_values)
+        possible_values = set(possible_values)
         if possible_values:
             y, x = free_position
             res = None
+
             for value in possible_values:
-                val = solve(newgrid(grid, y,x, value))
+                grid[y][x] = value
+                val = solve(grid)
                 if val:
                     res = val
+                    break
                     
             if res:
                 return res
+            else:
+                grid[y][x] = '.'
             return None
 
-                
             
 def dot_filter(array):
+    """ removing dots from array """
+
     return list(filter(lambda x: x != '.', array))
 
 def unique(array):
+    """ Checking does array has repeating values """
+
     return len(array) == len(set(array))
 
 def grid_is_unique(grid):
+    """ Chkeking does sudoku grid don't have any repeating numbers """
+
     results = []
     for i in range(9):
         results.append(cell_is_unique(grid, (i,0), (0,i), (3*(i//3), 3 * (i % 3))))
@@ -202,7 +214,6 @@ def grid_is_unique(grid):
         
         
 def cell_is_unique(grid, pos_row, pos_col, pos_block):
-    #print("POS ROW", pos_row)
     row = dot_filter(get_row(grid, pos_row))
     col = dot_filter(get_col(grid, pos_col))
     block = dot_filter(get_block(grid, pos_block))
@@ -265,41 +276,20 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     """
     if (N > 81):
         N = 81
-    numbers = "123456789"
-    grid = [['.' for i in range(9)] for i in range(9)]
-    for i in range(N):
-        y, x = pos = randint(0,8), randint(0,8)
-        val = list(find_possible_values(grid, pos))
-
-        # find a correct empty cell
-        while not len(val) or grid[y][x] != '.':
-            y, x = pos = randint(0,8), randint(0,8)
-            val = list(find_possible_values(grid, pos))
-        grid[y][x] = str(val[0])
-        # # placing number into randomly selected position
-        # # If can't find any rundom for generated position
-        # # Then selecting a new position
-        # while not len(val) or grid[y][x] != '.' or not cell_is_unique(grid, pos, pos, pos):
-        #     # reseting grid to initial state
-        #     grid[y][x] = '.'
-        #     # print("repeating...", i)
-        #     # print("position is: ", pos)
-        #     # print("value is: ", val[0])
-        #     # print("current is: ", grid[y][x])
-        #     # print("\n"*5)
-        #     pos = randint(0,8), randint(0,8)
-        #     x,y = pos
-        #     val = list(find_possible_values(grid, pos))
-
-        # #print(i, " -> ", val[0], " for ", x,":", y)
-        # grid[y][x] = str(val[0])
-    if solve(grid) != None: 
-        return grid
-    else:
-        return(generate_sudoku(N))
+    grid = [['.' for j in range(9)] for i in range(9)]
+    grid[0][0] = str(randint(1,9))
+    solution = solve(grid)
+    for i in range(81 - N):
+        y,x = randint(0,8), randint(0,8)
+        while grid[y][x] == '.':
+            y,x = randint(0,8), randint(0,8)
+        grid[y][x] = '.'
+    return grid
+        
         
 
-    
+
+        
     
 
 
@@ -307,7 +297,7 @@ if __name__ == "__main__":
     for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
         grid = read_sudoku(fname)
         display(grid)
-        solution = None #solve(grid)
+        solution = solve(grid)
         if not solution:
             print(f"Puzzle {fname} can't be solved")
         else:
