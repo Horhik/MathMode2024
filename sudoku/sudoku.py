@@ -1,6 +1,6 @@
 import pathlib
 import typing as tp
-
+from random import randint, shuffle
 
 import os
 from time import sleep
@@ -68,7 +68,7 @@ def get_row(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str
     >>> get_row([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']], (2, 0))
     ['.', '8', '9']
     """
-    (row_index, _)  = pos
+    (row_index, *_)  = pos
     return grid[row_index]
     
 
@@ -103,9 +103,7 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     y, x = pos
     x, y = x // 3 , y // 3 
     x, y = x*3, y* 3
-    #print( grid[y][x:x+3] )
-    #print( grid[y+1][x:x+3] )
-    #print( grid[y+2][x:x+3] )
+
 
     res =  grid[y][x:x+3] + grid[y + 1][x:x+3] + grid[y + 2][x:x+3]
     return res
@@ -123,8 +121,11 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
     >>> find_empty_positions([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']])
     (2, 0)
     """
-    for i in range(81):
-        magic_x, magic_y = i%9, i//9 # magic_x  returning x, magic_y returnig y
+    #suppose is squared
+    N = len(grid)*len(grid[0])
+    size = len(grid)
+    for i in range(N):
+        magic_x, magic_y = i%size, i//size # magic_x  returning x, magic_y returnig y
         if grid[magic_y][magic_x] == '.':
             return(magic_y, magic_x)
     return None
@@ -146,12 +147,7 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
     row = get_row(grid, pos)
     col = get_col(grid, pos)
     values = block +  row + col 
-    values = set(values)
-    # print("in pos: ", pos, "VALUES: ", list(values))
-    # print("row is: ", row)
-    # print("col is: ", col)
-    # print("col is: ", block)
-    return [str(possible) for possible in range(1, 10) if str(possible) not in values]
+    return set([str(possible) for possible in range(1, 10) if str(possible) not in values])
 
 def newgrid(grid: tp.List[tp.List[str]], y: int ,x: int, value: int):
     g = [[val for val in line] for line in grid]
@@ -174,19 +170,11 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
     free_position = find_empty_positions(grid)
     # If no free positions then the sudoku is full => It's solved
     if not free_position:
-        print("NO FREE POSITIONS")
-        
         return grid
     else:
         # If it's not solved 
         possible_values = find_possible_values(grid, free_position)
-        #print(possible_values)
         if possible_values:
-            #print("NO POSSIBLE VALUES IN")
-            #display(grid)
-            #display(grid)
-            #sleep(0.001)
-            #print("\n"*height)
             y, x = free_position
             res = None
             for value in possible_values:
@@ -200,14 +188,57 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
 
                 
             
+def dot_filter(array):
+    return list(filter(lambda x: x != '.', array))
+
+def unique(array):
+    return len(array) == len(set(array))
+
+def grid_is_unique(grid):
+    results = []
+    for i in range(9):
+        results.append(cell_is_unique(grid, (i,0), (0,i), (3*(i//3), 3 * (i % 3))))
+    return(all(results))
+        
+        
+def cell_is_unique(grid, pos_row, pos_col, pos_block):
+    #print("POS ROW", pos_row)
+    row = dot_filter(get_row(grid, pos_row))
+    col = dot_filter(get_col(grid, pos_col))
+    block = dot_filter(get_block(grid, pos_block))
+
+    if unique(row) and unique(col) and unique(block):
+        return True
+    return False
         
 
 
-
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
-    """ Если решение solution верно, то вернуть True, в противном случае False """
-    # TODO: Add doctests with bad puzzles
-    pass
+    """ Если решение solution верно, то вернуть True, в противном случае False 
+
+    >>> grid = read_sudoku('puzzle1.txt')
+    >>> check_solution(solve(grid))
+    True
+    >>> grid = read_sudoku('puzzle2.txt')
+    >>> check_solution(solve(grid))
+    True
+    >>> grid = read_sudoku('puzzle3.txt')
+    >>> check_solution(solve(grid))
+    True
+
+    """
+    if solution == None:
+        return False
+    is_full = all([i.count('.')  == 0 for i in solution])
+    is_correct = all([len(find_possible_values(solution, (i,j )))==0 for j in range(9) for i in range(9)])
+    is_unique = grid_is_unique(solution)
+            
+            
+    if is_full and is_correct and solution != None and is_unique:
+        return True
+    return False
+
+
 
 
 def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
@@ -232,17 +263,52 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     >>> check_solution(solution)
     True
     """
-    pass
+    if (N > 81):
+        N = 81
+    numbers = "123456789"
+    grid = [['.' for i in range(9)] for i in range(9)]
+    for i in range(N):
+        y, x = pos = randint(0,8), randint(0,8)
+        val = list(find_possible_values(grid, pos))
+
+        # find a correct empty cell
+        while not len(val) or grid[y][x] != '.':
+            y, x = pos = randint(0,8), randint(0,8)
+            val = list(find_possible_values(grid, pos))
+        grid[y][x] = str(val[0])
+        # # placing number into randomly selected position
+        # # If can't find any rundom for generated position
+        # # Then selecting a new position
+        # while not len(val) or grid[y][x] != '.' or not cell_is_unique(grid, pos, pos, pos):
+        #     # reseting grid to initial state
+        #     grid[y][x] = '.'
+        #     # print("repeating...", i)
+        #     # print("position is: ", pos)
+        #     # print("value is: ", val[0])
+        #     # print("current is: ", grid[y][x])
+        #     # print("\n"*5)
+        #     pos = randint(0,8), randint(0,8)
+        #     x,y = pos
+        #     val = list(find_possible_values(grid, pos))
+
+        # #print(i, " -> ", val[0], " for ", x,":", y)
+        # grid[y][x] = str(val[0])
+    if solve(grid) != None: 
+        return grid
+    else:
+        return(generate_sudoku(N))
+        
+
+    
+    
 
 
 if __name__ == "__main__":
     for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
         grid = read_sudoku(fname)
         display(grid)
-        solution = solve(grid)
+        solution = None #solve(grid)
         if not solution:
             print(f"Puzzle {fname} can't be solved")
         else:
-            print("SOLVED! ", solution)
             display(solution)
-        sleep(2)
