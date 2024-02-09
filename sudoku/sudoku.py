@@ -1,9 +1,9 @@
 import pathlib
 import typing as tp
 from random import randint, shuffle
-
+import threading
 import os
-from time import sleep
+from time import sleep, time
 
 width, height = os.get_terminal_size()
 
@@ -290,15 +290,37 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
 
         
+def get_hard_puzzles():
+    f = open("hard_puzzles.txt", "r")
+    lines = f.readlines()
+    return [puzzle[0:81] for puzzle in lines]
+
     
+def run_solve(grid, index) -> None:
+    start = time()
+    sol = solve(grid)
+    end = time()
+    print(f"{index} -> finished in: {end-start}")
+
 
 
 if __name__ == "__main__":
     for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
         grid = read_sudoku(fname)
+        print(f"Solving {fname}...")
         display(grid)
         solution = solve(grid)
         if not solution:
             print(f"Puzzle {fname} can't be solved")
         else:
+            print("\n --- Puzzle is solved! --- \n\n")
             display(solution)
+    print("Solving hard puzzles")
+    pazzles = get_hard_puzzles()
+    index = 0
+    for puzzle in pazzles:
+        index += 1
+        grid = group(puzzle, 9)
+        t = threading.Thread(target=run_solve, args=(grid,index,))
+        t.start()
+
