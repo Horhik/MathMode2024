@@ -70,7 +70,7 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     """
 
 
-    # ОЧЕНЬ ЧИТАЕМАЯ И ЭФФЕКТИВНА ФУНКЦИЯ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # ОЧЕНЬ ЧИТАЕМАЯ И ЭФФЕКТИВНАЯ ФУНКЦИЯ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     return ''.join([process_letter(letter, ord('а'), ord('я') - ord('a') + 1, shift) if  ord('а') <= ord(letter.lower()) <= ord('я') else process_letter(letter, ord('a'), ord('z') - ord('a') + 1, shift) if ord('a') <= ord(letter.lower()) <= ord('z') else letter for letter in plaintext])
     

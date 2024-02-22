@@ -87,12 +87,12 @@ def multiplicative_inverse(e: int, phi: int) -> int:
 
     q[n] = r[n-2]//r[n-1]
     r[n] = r[n-2] - r[n-1]*q[n]
-    print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
+    #print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
     while r[n] != 0:
         n+=1
         q[n] = r[n-2]//r[n-1]
         r[n] = r[n-2] - r[n-1]*q[n]
-        print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
+        #print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
 
     n+=1
     GCD = r[n-1]
@@ -104,11 +104,11 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     y[n] = 1
     for i in range(n-1, 0, -1):
         y[i] = x[i+1] - y[i+1]*q[i-1]
-        print(f"{y[i]} = {x[i+1]} - {y[i+1]}*{q[i-1]}")
+        #print(f"{y[i]} = {x[i+1]} - {y[i+1]}*{q[i-1]}")
         x[i] = y[i+1]
         
     # Finding multiplicative inverse
-    print(f'{a}*{x[N + 1]} + {b}*{y[N + 1]} = {r[n-2]}')
+    #print(f'{a}*{x[N + 1]} + {b}*{y[N + 1]} = {r[n-2]}')
     return(x[N + 1]%b)
 
 
@@ -119,10 +119,10 @@ def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[in
     elif p == q:
         raise ValueError("p and q cannot be equal")
 
-    # n = pq
+    n = p*q
     # PUT YOUR CODE HERE
 
-    # phi = (p-1)(q-1)
+    phi = (p-1)*(q-1)
     # PUT YOUR CODE HERE
 
     # Choose an integer e such that e and phi(n) are coprime
