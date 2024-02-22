@@ -68,21 +68,23 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     >>> multiplicative_inverse(7, 40)
     23
     """
-    # r_n = r_(n-2) - r_(n-1)*q_n
 
     a = e
-    a = phi
-    (d,y,x) = extended_euclid(a,b)
-    print(d,y,x)
+    b = phi
     
-    '''
+    # inicializing arrays of rests and `div`s
     r = [0 for i in range(10000)]
     q = [0 for i in range(10000)]
 
+    # start position to be able include `b` and `a` as r(-1) and r(0)
     N = 1
     r[N + (-1)] = b
     r[N + 0]  = a
+
+    # COUNTING GCD
+
     n = N + 1
+
     q[n] = r[n-2]//r[n-1]
     r[n] = r[n-2] - r[n-1]*q[n]
     print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
@@ -93,11 +95,9 @@ def multiplicative_inverse(e: int, phi: int) -> int:
         print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
 
     n+=1
-    print('GCD is: ', r[n-1])
-    #y = lambda i: 1 if r[i] == 0 else y(i+2) - y(i+1) * q[i]
-    #x = lambda i: 0 if r[i] == 0 else y(i+1)
-    print("R:", r[:n])
-    print("Q:", q[:n])
+    GCD = r[n-1]
+
+    # Counting ax + by = GCD(a,b)
 
     x = [0 for i in range(n+1)]
     y = [0 for i in range(n+1)]
@@ -106,9 +106,10 @@ def multiplicative_inverse(e: int, phi: int) -> int:
         y[i] = x[i+1] - y[i+1]*q[i-1]
         print(f"{y[i]} = {x[i+1]} - {y[i+1]}*{q[i-1]}")
         x[i] = y[i+1]
-    print("X: ", x)
-    print("Y: ", y)
-    '''
+        
+    # Finding multiplicative inverse
+    print(f'{a}*{x[N + 1]} + {b}*{y[N + 1]} = {r[n-2]}')
+    return(x[N + 1]%b)
 
 
 
