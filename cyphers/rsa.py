@@ -1,4 +1,5 @@
 import random
+from math import sqrt
 import typing as tp
 
 
@@ -13,13 +14,24 @@ def is_prime(n: int) -> bool:
     >>> is_prime(8)
     False
     """
-    # PUT YOUR CODE HERE
-    pass
+
+    if 1 < n < 4:
+        return True
+
+    if n%2 == 0 or n == 1:
+        return False
+
+    for i in list(range(3, int(sqrt(n) + 1), 2)):
+        if n % i == 0:
+            return False
+    return True
+    
 
 
 def gcd(a: int, b: int) -> int:
     """
     Euclid's algorithm for determining the greatest common divisor.
+    
 
     >>> gcd(12, 15)
     3
@@ -27,7 +39,25 @@ def gcd(a: int, b: int) -> int:
     1
     """
     # PUT YOUR CODE HERE
-    pass
+
+    if b == 0:
+        return a
+
+    return(gcd(b,a%b))
+
+
+def extended_euclid(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        gcd, x, y = extended_euclid(b % a, a)
+        return (gcd, y - (b // a) * x, x)
+
+
+
+def count_x_y(q,r,a,b):
+    y = lambda i: 1 if r[i] == 0 else 0 if r[i-1] == 0 else (y(i+1), y(i+2) - y(i+1)*q[i])
+    return(y(0), y(1))
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
@@ -38,8 +68,48 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     >>> multiplicative_inverse(7, 40)
     23
     """
-    # PUT YOUR CODE HERE
-    pass
+    # r_n = r_(n-2) - r_(n-1)*q_n
+
+    a = e
+    a = phi
+    (d,y,x) = extended_euclid(a,b)
+    print(d,y,x)
+    
+    '''
+    r = [0 for i in range(10000)]
+    q = [0 for i in range(10000)]
+
+    N = 1
+    r[N + (-1)] = b
+    r[N + 0]  = a
+    n = N + 1
+    q[n] = r[n-2]//r[n-1]
+    r[n] = r[n-2] - r[n-1]*q[n]
+    print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
+    while r[n] != 0:
+        n+=1
+        q[n] = r[n-2]//r[n-1]
+        r[n] = r[n-2] - r[n-1]*q[n]
+        print(f'{r[n-2]} = {r[n-1]}*{q[n]} + {r[n]}')
+
+    n+=1
+    print('GCD is: ', r[n-1])
+    #y = lambda i: 1 if r[i] == 0 else y(i+2) - y(i+1) * q[i]
+    #x = lambda i: 0 if r[i] == 0 else y(i+1)
+    print("R:", r[:n])
+    print("Q:", q[:n])
+
+    x = [0 for i in range(n+1)]
+    y = [0 for i in range(n+1)]
+    y[n] = 1
+    for i in range(n-1, 0, -1):
+        y[i] = x[i+1] - y[i+1]*q[i-1]
+        print(f"{y[i]} = {x[i+1]} - {y[i+1]}*{q[i-1]}")
+        x[i] = y[i+1]
+    print("X: ", x)
+    print("Y: ", y)
+    '''
+
 
 
 def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
@@ -104,3 +174,4 @@ if __name__ == "__main__":
     print("Decrypting message with public key ", public, " . . .")
     print("Your message is:")
     print(decrypt(public, encrypted_msg))
+
