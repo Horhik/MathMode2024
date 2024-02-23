@@ -37,8 +37,9 @@ def login():
         name = (request.form['username'])
         return login_user(name)
     return '''
+        <h1> LOGIN </h1>
         <form method="post">
-            <p><input type=text name=username>
+            <p>login: <input type=text name=username>
             <p><input type=submit value=Login>
         </form>
     '''

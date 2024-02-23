@@ -27,7 +27,8 @@ Other lines are messages
 `{"time": int, "sender": string, "text": string}`
 
 ## TODO
-- [ ] Public pool of messages
+- [x] Public pool of messages
 - [ ] Simple 2-person chat
+- [ ] Auto update
 - [ ] Basic security
 - [ ] API
