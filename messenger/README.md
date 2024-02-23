@@ -6,11 +6,25 @@ messenger database is just a filetree
 users
 ├── oleg
 │   └── messages
-│       └── pool.json 
+│       └── ne_oleg.chat 
 └── ne_oleg
     └── messages
-        └── pool.json 
+        └── oleg.chat 
 ```
+
+
+
+# Small Documentation
+
+## Structure of `.chat`
+
+Each line of file conatins one-line json
+
+The first line contains info about chat
+`{"name": string, "participants": [string]}`
+
+Other lines are messages
+`{"time": int, "sender": string, "text": string}`
 
 ## TODO
 - [ ] Public pool of messages

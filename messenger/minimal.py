@@ -1,5 +1,5 @@
 from flask import abort, redirect, url_for, render_template, Flask, request, session
-from messenger import open_messenger
+from messenger import open_messenger, render_chat, process_message
 from users import login_user, register_user, get_userlist 
 from pathlib import Path
 
@@ -21,9 +21,15 @@ def page_not_found(error):
 def profile(username):
     return open_messenger(name=username)
 
-@app.route('/<username>/messenger/<chat>')
+@app.route('/<username>/messenger/<chat>', methods=['GET', 'POST'])
 def chat(username, chat):
-    return Path("users", username, "messages", chat).read_text()
+    #data = get_chat_data(username, chat)
+    if request.method == 'POST':
+        process_message(request.form, username, chat)
+        return render_chat(username, chat )
+    else:
+        return render_chat(username, chat )
+#Path("users", username, "messages", chat).read_text()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

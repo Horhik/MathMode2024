@@ -1,9 +1,19 @@
 <!doctype html>        
-<h1>Chat with {{ chat_name }} <h1>
+<h1>{{ header.name }}</h1>
+<p> on line with: {% for user in header.participants %}  {{ user }} {% endfor %} </p>
+
     <ul>
-    {% for chat in chats %}
+    {% for message in messages %}
     <li>
-      <a href="/{{name}}/messenger/{{chat}}">{{chat}}</a>
+      <b>{{ message.sender }}:  </b>
+      <p>{{ message.text }} </p>
+      <br>
+      <small> {{message.time}} </small>
     </li>
     {% endfor %}
     </ul>
+
+<form method="post">
+  <p><input type=text name=message placeholder="Type here">
+  <p><input type=submit value=SendMessage>
+</form>
