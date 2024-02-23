@@ -1,4 +1,25 @@
+
 <!doctype html>        
+<style>
+ul  {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: 500px;
+    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+li {
+    background: bisque;
+    margin: 10px;
+    list-style: none;
+    padding: 20px 20px;
+    border-radius: 16px;
+    font-family: sans-serif;
+}
+</style>
 <h1>{{ header.name }}</h1>
 <p> on line with: {% for user in header.participants %}  {{ user }} {% endfor %} </p>
 

@@ -12,8 +12,10 @@ def open_messenger(name):
     
     else:
         return f'No such user: {name}'
+
 def render_chat(username, chat):
     (header, messages) = get_chat_data(username, chat)
+    messages = reversed(messages)
     return render_template("messenger.html", header=header, messages=messages), 200
     
 
