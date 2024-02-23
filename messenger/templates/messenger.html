@@ -1,0 +1,9 @@
+<!doctype html>        
+<h1>Chat with {{ chat_name }} <h1>
+    <ul>
+    {% for chat in chats %}
+    <li>
+      <a href="/{{name}}/messenger/{{chat}}">{{chat}}</a>
+    </li>
+    {% endfor %}
+    </ul>

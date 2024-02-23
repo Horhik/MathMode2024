@@ -1,0 +1,12 @@
+<!doctype html>
+<p>
+{% if preambola %}
+<b>  {{ preambola }} </b>
+{% else %}
+<b> Registration </b>
+{% endif %}
+</p>
+<form method="post">
+  <p><input type=text name=username value={{ default_name }}>
+  <p><input type=submit value=Register>
+</form>
