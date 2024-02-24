@@ -29,6 +29,6 @@ Other lines are messages
 ## TODO
 - [x] Public pool of messages
 - [ ] Simple 2-person chat
-- [ ] Auto update
+- [x] Auto update
 - [ ] Basic security
 - [ ] API

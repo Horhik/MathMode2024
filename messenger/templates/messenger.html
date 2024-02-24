@@ -1,4 +1,25 @@
-<meta http-equiv="refresh" content="60" />
+<meta http-equiv="refresh" content="3" />
+
+<script type="text/javascript">
+
+window.alert = function() {};
+
+window.addEventListener('beforeunload', function (e) {
+  // Cancel the event
+  e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+  // Chrome requires returnValue to be set
+  e.returnValue = '';
+});
+
+window.addEventListener('load', (event) => {
+    let textbox =  document.getElementById("message");
+    textbox.focus();
+    textbox.selectionStart = textbox.selectionEnd = textbox.value.length;
+
+});
+
+</script>
+
 <!doctype html>        
 <style>
 ul  {
@@ -37,6 +58,6 @@ li {
     </ul>
 
 <form method="post">
-  <p><input type=text name=message placeholder="Type here">
+  <p><input id="message" type=text name=message placeholder="Type here" autofocus>
   <p><input type=submit value=SendMessage>
 </form>
