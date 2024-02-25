@@ -44,6 +44,7 @@ def get_chat_list(name):
     return list(map(lambda x: x.name, Path(USER_FOLDER, name, USER_MESSAGES).iterdir()))
 
 def get_chat_file(name,chat):
+    print("Getting chat file: ", name, chat)
     return Path(USER_FOLDER, name, USER_MESSAGES, chat)
 
 def append_new_message(message, chat_file):

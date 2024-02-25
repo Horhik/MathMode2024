@@ -1,5 +1,5 @@
 {% set name = username.split(' ') %}
-<meta http-equiv="refresh" content="10" />
+<!-- <meta http-equiv="refresh" content="10" /> -->
 
 <script type="text/javascript">
 
@@ -22,17 +22,61 @@ window.addEventListener('load', (event) => {
 </script>
 
 <!doctype html>        
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/archivo-narrow" type="text/css"/> 
 <style>
-ul  {
+  body, button, textarea, header, footer{
+      
+      background: #e1d0e0;
+      box-sizing: border-box;
+  }
+  html{
+      height: 100vh;
+  }
+  body{
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 800px;
+      margin: 0 auto;
+      box-sizing: border-box;
+  }
+  *{
+      font-family: 'ArchivoNarrowRegular', mononoki, Ubuntu, sans-serif; 
+  }
+
+  form {
+  flex-grow: 1;
+  margin: 0;
+  max-width: 1000px;
+  }
+
+  form p{
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin: 0;
+  }
+  #message{
+      flex-grow: 2;
+  }
+  #message_send{
+      flex-grow: 1;
+  }
+.messages  {
     margin: 0;
     padding: 0;
     list-style: none;
-    height: 500px;
+    border: 5px red;
     overflow: scroll;
     overflow-x: scroll;
     overflow-y: scroll;
     display: flex;
     flex-direction: column-reverse;
+    border-color: green;
+    height: 100vh;
+    padding-bottom: 80px;
+  box-sizing: border-box;
 }
 
 @keyframes slideInFromLeft {
@@ -44,7 +88,7 @@ ul  {
   }
 }
 
-li {
+.message {
     background: bisque;
     margin: 10px;
     list-style: none;
@@ -55,6 +99,39 @@ li {
     animation: 0.1s ease-out 0s 1 slideInFromLeft;
 }
 
+  header{
+      position: absolute;
+      width: 100vw;
+      left: 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: -18px 18px 72px -3px rgba(72,32,32,0.75);
+      -webkit-box-shadow: -18px 18px 72px -3px rgba(72,32,32,0.75);
+      -moz-box-shadow: -18px 18px 72px -3px rgba(72,32,32,0.75);
+
+      background: #e1d0e0;
+
+      top:0;
+  }
+  footer{
+      position: absolute;
+      width: 100vw;
+      left: 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      bottom: 0;
+      box-shadow: -14px -36px 72px -3px rgba(72,32,32,0.75);
+      -webkit-box-shadow: -14px -36px 72px -3px rgba(72,32,32,0.75);
+      -moz-box-shadow: -14px -36px 72px -3px rgba(72,32,32,0.75);
+      background: #e1d0e0;
+  }
 
 
 {{name[0]}}, .{{name[1]}}{
@@ -66,24 +143,31 @@ li {
 
 }
 </style>
+<header>
 <navigation>
   - <a href="/profile/{{username}}"> Бежать домой </a>
   </navigation>
 <h1>{{ header.name }}</h1>
 <p> on line with: {% for user in header.participants %}  {{ user }} {% endfor %} </p>
 
-    <ul>
+</header>
+
+    <ul class="messages">
     {% for message in messages %}
     <li class="message {{message.sender}}">
       <b>{{ message.sender }}:  </b>
-      <p>{{ message.text }} </p>
+      <p>{{ message.text|safe }} </p>
       <br>
       <small> {{message.time}} </small>
     </li>
     {% endfor %}
     </ul>
 
+ <footer>
+
 <form method="post">
-  <p><input id="message" type=text name=message placeholder="Type here" autofocus>
-  <p><input type=submit value=SendMessage>
+  <p><textarea id="message" type=text name=message placeholder="Type here" autofocus></textarea>
+  <p><input id="message_send" for="message" type=submit value=SendMessage>
 </form>
+
+</footer>

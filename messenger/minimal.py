@@ -30,11 +30,14 @@ def profile(username):
 @app.route('/profile/<username>/messenger/<chat>', methods=['GET', 'POST'])
 def chat(username, chat):
     #data = get_chat_data(username, chat)
+    print("GETTING: ", username,chat)
     if request.method == 'POST':
+        print("GETTING: ", username, chat, request.form)
         process_message(request.form, username, chat)
         return render_chat(username, chat )
     else:
         return render_chat(username, chat )
+
 #Path("users", username, "messages", chat).read_text()
 
 @app.route('/login', methods=['GET', 'POST'])

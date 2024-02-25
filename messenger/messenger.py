@@ -2,6 +2,7 @@ from flask import abort, redirect, url_for, render_template, Flask, request, ses
 from users import user_exists
 from database import get_chat_list, get_chat_data,append_new_message, get_chat_file, new_chat, generate_chat_header
 from datetime import datetime
+from bot import call_orwell
 import json
 
 def open_messenger(name):
@@ -14,6 +15,7 @@ def open_messenger(name):
         return f'No such user: {name}'
 
 def render_chat(username, chat):
+    print("RENDERING WITH: ", username, chat)
     (header, messages) = get_chat_data(username, chat)
     messages = reversed(messages)
     return render_template("messenger.html", header=header, messages=messages, username=username), 200
@@ -21,8 +23,12 @@ def render_chat(username, chat):
 
 def process_message(form, username, chat):
     text = form["message"]
+    words = text.splie(' ')
     message = json.dumps({"time": datetime.now().isoformat(), "sender": username, "text": text})
     append_new_message(message, get_chat_file(username, chat))
+
+    if text[0] == '/':
+        call_orwell(username, chat, command=words[0][1:], message=words[1:])
     
 
 
