@@ -10,7 +10,7 @@ def open_messenger(name):
     if user_exists(name):
         chat_list = get_chat_list(name)
         return render_template('user_profile.html', name=name, chats=chat_list), 200
-    
+
     else:
         return f'No such user: {name}'
 
@@ -19,17 +19,19 @@ def render_chat(username, chat):
     (header, messages) = get_chat_data(username, chat)
     messages = reversed(messages)
     return render_template("messenger.html", header=header, messages=messages, username=username), 200
-    
+
 
 def process_message(form, username, chat):
     text = form["message"]
     words = text.split(' ')
-    message = json.dumps({"time": datetime.now().isoformat(), "sender": username, "text": text})
-    append_new_message(message, get_chat_file(username, chat))
+    if len(''.join(words)) > 0 and (user_exists(chat) or chat=="pool") and user_exists(username):
+        message = json.dumps({"time": datetime.now().isoformat(), "sender": username, "text": text})
+        append_new_message(message, get_chat_file(username, chat))
 
-    if text[0] == '/':
-        call_orwell(username, chat, command=words[0][1:], message=words[1:])
-    
+        if text[0] == '/':
+            call_orwell(username, chat, command=words[0][1:], message=words[1:])
+        return True
+
 
 
 def create_new_chat(username, chat):
@@ -46,7 +48,7 @@ def create_new_chat(username, chat):
         </small>
         <button onclick="history.back()">Go Back</button>
         '''
-        
 
 
-           
+
+
