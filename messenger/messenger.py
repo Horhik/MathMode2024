@@ -23,7 +23,7 @@ def render_chat(username, chat):
 
 def process_message(form, username, chat):
     text = form["message"]
-    words = text.splie(' ')
+    words = text.split(' ')
     message = json.dumps({"time": datetime.now().isoformat(), "sender": username, "text": text})
     append_new_message(message, get_chat_file(username, chat))
 

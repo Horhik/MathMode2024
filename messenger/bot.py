@@ -3,12 +3,12 @@ import json
 
 
 BOT_COMMANDS = {
-    'help': '<h1>ты ничего не можешь</h1>',
+    'help': '<h1>ты ничего не можешь</h1> <br><br><br> <small>ask orwell about /commands</small>',
     'помоги': 'ты ничего не можешь',
     'спой': '<iframe width="420" height="345" src="https://yewtu.be/embed/i9AHJkHqkpw?autoplay=1" frameborder="0" allowfullscreen></iframe>',
     'пустота': "<q><i>Сараха сказал: «Кто живет в состоянии пустоты, лишенной сострадания, тот не открыл высшего пути; но также тот, кто медитирует только на сострадание, останется в сансаре и не достигнет освобождения».</i></q>",
     'gpt': "<h3 color='red'>Не прибегай к темным силам, будь собой</h3>",
-    'commands': "<code>/help</code><br><code>/помоги</code><br><code>/спой</code><br><code>/help</пустота><br><code>/help</gpt><br><code>/display</code>",
+    'commands': "<code>/help</code><br><code>/помоги</code><br><code>/спой</code><br><code>/help</пустота><br><code>/help</gpt><br><code>/display [link to image] </code> - will display an image ",
     'display': ''
     
     }

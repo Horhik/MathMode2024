@@ -27,5 +27,6 @@ pkgs.mkShell {
     export raylib_LIBRARY=${pkgs.raylib}/lib
     export raylib_INCLUDE_DIR=${pkgs.raylib}/include
 
+
   '';
 }
