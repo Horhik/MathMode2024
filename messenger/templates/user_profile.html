@@ -1,10 +1,72 @@
 <!doctype html>        
+<meta http-equiv="refresh" content="60" />
+
+<script type="text/javascript">
+
+window.alert = function() {};
+
+window.addEventListener('beforeunload', function (e) {
+  // Cancel the event
+  e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+  // Chrome requires returnValue to be set
+  e.returnValue = '';
+});
+
+window.addEventListener('load', (event) => {
+    let textbox =  document.getElementById("message");
+    textbox.focus();
+    textbox.selectionStart = textbox.selectionEnd = textbox.value.length;
+
+});
+
+</script>
+
+<!doctype html>        
+<style>
+ul  {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+li {
+    background: bisque;
+    margin: 10px;
+    list-style: none;
+    padding: 20px 20px;
+    border-radius: 16px;
+    font-family: sans-serif;
+}
+</style>
+
+<header>
+  <navigation>
+    <ul>
+      <li><a href='/login'>Login page</a></ul>
+      </ul>
+    </navigation>
+  </header>
+
 <h1>Hi {{ name }} <h1>
+
+
+<form method="get" >
+  <p>  Start new chat with: <br>
+    <input type=text name="newchat" id="newchat" placeholder="username">
+  <input for="newchat" type=submit value="NewChat"></p>
+</form>
+
 <h3> Avaliable chats: </h3>
     <ul>
     {% for chat in chats %}
     <li>
-      <a href="/{{name}}/messenger/{{chat}}">{{chat}}</a>
+      <a href="/profile/{{name}}/messenger/{{chat}}">{{chat}}</a>
     </li>
     {% endfor %}
     </ul>
+ 

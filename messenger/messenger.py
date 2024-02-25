@@ -1,6 +1,6 @@
 from flask import abort, redirect, url_for, render_template, Flask, request, session
 from users import user_exists
-from database import get_chat_list, get_chat_data,append_new_message
+from database import get_chat_list, get_chat_data,append_new_message, get_chat_file, new_chat, generate_chat_header
 from datetime import datetime
 import json
 
@@ -16,12 +16,31 @@ def open_messenger(name):
 def render_chat(username, chat):
     (header, messages) = get_chat_data(username, chat)
     messages = reversed(messages)
-    return render_template("messenger.html", header=header, messages=messages), 200
+    return render_template("messenger.html", header=header, messages=messages, username=username), 200
     
 
 def process_message(form, username, chat):
     text = form["message"]
     message = json.dumps({"time": datetime.now().isoformat(), "sender": username, "text": text})
-    append_new_message(message, username, chat)
+    append_new_message(message, get_chat_file(username, chat))
     
 
+
+def create_new_chat(username, chat):
+    if  chat not in get_chat_list(username) and user_exists(chat):
+           header=generate_chat_header(username, chat)
+           print(" header created! ", header)
+           new_chat(header, username, chat)
+           return redirect(f'/profile/{username}/messenger/{chat}')
+    else:
+        return '''
+        Developer was too lazy to process this error. <br> So... <h1><b><i>There's an error</i></b></h1>
+        <br> <small>
+        probably no such user, or u're already chating with that person
+        </small>
+        <button onclick="history.back()">Go Back</button>
+        '''
+        
+
+
+           
